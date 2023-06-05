@@ -11,8 +11,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public Thread gameThread;
     public Image image;
     public Graphics graphics;
+    private Snake snake;
+
     // constructor
     public GamePanel() {
+
+        snake = new Snake(15);
 
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -33,12 +37,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     private void draw(Graphics g) {
         // draw all the created objects from the constructor 
+        snake.draw(g);
        
     }
 
     // call associated move methods for each objects movement
     public void move() {
-      
+        snake.move();
     }
     
     // collision 
@@ -49,7 +54,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     // run the game loop
     public void run() {
         long lastTime = System.nanoTime();
-        double amountOfTicks = 60;
+        double amountOfTicks = 30;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         long now;
@@ -71,6 +76,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     // Key press listeners 
     @Override
     public void keyPressed(KeyEvent e) {
+
+        int keyCode = e.getKeyCode();
+        if (keyCode == KeyEvent.VK_UP && snake.direction != 1) {
+            snake.setDirection(0); // Up
+        } else if (keyCode == KeyEvent.VK_DOWN && snake.direction != 0) {
+            snake.setDirection(1); // Down
+        } else if (keyCode == KeyEvent.VK_LEFT && snake.direction != 3) {
+            snake.setDirection(2); // Left
+        } else if (keyCode == KeyEvent.VK_RIGHT && snake.direction != 2) {
+            snake.setDirection(3); // Right
+        }
 
     }
 
