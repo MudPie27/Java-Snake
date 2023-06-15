@@ -1,88 +1,100 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 
 public class Snake {
 
-    public ArrayList<Point> bodySegments;
-    private int direction;
-    private int speed;
+    private static final int INITIAL_LENGTH = 5;
 
-    public Snake(int initialLength) {
-        bodySegments = new ArrayList<>();
-        direction = 3; // Right by default
-        speed = 5;
+    private int[] x;
+    private int[] y;
+    private int length;
+    private char direction;
 
-        // Initialize the snake's body segments
-        int startX = 400;
-        int startY = 0;
-        for (int i = 0; i < initialLength; i++) {
-            int segmentX = startX - i * 20;
-            int segmentY = startY;
-            bodySegments.add(new Point(segmentX, segmentY));
+    public Snake() {
+        x = new int[GamePanel.NUMBER_OF_UNITS];
+        y = new int[GamePanel.NUMBER_OF_UNITS];
+        length = 0;
+        direction = 'D';
+    }
+
+    public void init() {
+        length = INITIAL_LENGTH;
+        for (int i = 0; i < length; i++) {
+            x[i] = 0;
+            y[i] = 0;
         }
-    }
-
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
-
-    public void controls(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_UP && direction != 1)
-            setDirection(0); // Up
-        else if (e.getKeyCode() == KeyEvent.VK_DOWN && direction != 0)
-            setDirection(1); // Down
-        else if (e.getKeyCode() == KeyEvent.VK_LEFT && direction != 3)
-            setDirection(2); // Left
-        else if (e.getKeyCode() == KeyEvent.VK_RIGHT && direction != 2)
-            setDirection(3); // Right
     }
 
     public void move() {
-        // Move the snake's head in the current direction
-        Point head = bodySegments.get(0);
-        int headX = head.x;
-        int headY = head.y;
-
-        switch (direction) {
-            case 0: // Up
-                headY -= speed;
-                break;
-            case 1: // Down
-                headY += speed;
-                break;
-            case 2: // Left
-                headX -= speed;
-                break;
-            case 3: // Right
-                headX += speed;
-                break;
+        for (int i = length; i > 0; i--) {
+            x[i] = x[i - 1];
+            y[i] = y[i - 1];
         }
 
-        // Create a new head segment with the updated position
-        Point newHead = new Point(headX, headY);
-
-        // Insert the new head segment at the beginning of the bodySegments list
-        bodySegments.add(0, newHead);
-
-        // Remove the tail segment to maintain the snake's length
-        bodySegments.remove(bodySegments.size() - 1);
+        if (direction == 'L') {
+            x[0] -= GamePanel.UNIT_SIZE;
+        } else if (direction == 'R') {
+            x[0] += GamePanel.UNIT_SIZE;
+        } else if (direction == 'U') {
+            y[0] -= GamePanel.UNIT_SIZE;
+        } else if (direction == 'D') {
+            y[0] += GamePanel.UNIT_SIZE;
+        }
     }
 
-    public void grow() {
-        // To make the snake grow, add a new segment at the current tail position
-        Point tail = bodySegments.get(bodySegments.size() - 1);
-        bodySegments.add(new Point(tail.x, tail.y));
+    public boolean checkSelfCollision() {
+        for (int i = length; i > 0; i--) {
+            if (x[0] == x[i] && y[0] == y[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public void draw(Graphics g) {
-        g.setColor(new Color(115, 150, 240));
+    public boolean checkWallCollision() {
+        return x[0] < 0 || x[0] >= GamePanel.WIDTH || y[0] < 0 || y[0] >= GamePanel.HEIGHT;
+    }
 
-        for (Point segment : bodySegments) {
-            int segmentX = segment.x;
-            int segmentY = segment.y;
-            g.fillRect(segmentX, segmentY, 30, 30);
+    public void increaseLength() {
+        length++;
+    }
+
+    public void setDirection(int keyCode) {
+        switch (keyCode) {
+            case KeyEvent.VK_LEFT:
+                if (direction != 'R') {
+                    direction = 'L';
+                }
+                break;
+
+            case KeyEvent.VK_RIGHT:
+                if (direction != 'L') {
+                    direction = 'R';
+                }
+                break;
+
+            case KeyEvent.VK_UP:
+                if (direction != 'D') {
+                    direction = 'U';
+                }
+                break;
+
+            case KeyEvent.VK_DOWN:
+                if (direction != 'U') {
+                    direction = 'D';
+                }
+                break;
+        }
+    }
+
+    public Point getHead() {
+        return new Point(x[0], y[0]);
+    }
+
+    public void draw(Graphics graphics) {
+        graphics.setColor(Color.white);
+        for (int i = 0; i < length; i++) {
+            graphics.fillRect(x[i], y[i], GamePanel.UNIT_SIZE, GamePanel.UNIT_SIZE);
         }
     }
 }

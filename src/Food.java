@@ -1,33 +1,22 @@
 import java.awt.*;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Food {
 
     private int x;
     private int y;
-    private int size=15;
 
-    public Food() {
-        spawnFood();
+    public void generateFood() {
+        x = ThreadLocalRandom.current().nextInt(0, GamePanel.WIDTH / GamePanel.UNIT_SIZE) * GamePanel.UNIT_SIZE;
+        y = ThreadLocalRandom.current().nextInt(0, GamePanel.HEIGHT / GamePanel.UNIT_SIZE) * GamePanel.UNIT_SIZE;
     }
 
-    public void spawnFood() {
-        Random random = new Random();
-        int maxX = GamePanel.GAME_WIDTH / size;
-        int maxY = GamePanel.GAME_HEIGHT / size;
-
-        // Generate random coordinates for the food within the game screen
-        x = random.nextInt(maxX) * size;
-        y = random.nextInt(maxY) * size;
+    public Point getPosition() {
+        return new Point(x, y);
     }
 
-    public void draw(Graphics g) {
-        g.setColor(Color.RED);
-        g.fillRect(x, y, size, size);
-    }
-
-    public boolean checkCollision(int headX, int headY) {
-        // Check collision between the snake's head and the food
-        return x == headX && y == headY;
+    public void draw(Graphics graphics) {
+        graphics.setColor(Color.RED);
+        graphics.fillOval(x, y, GamePanel.UNIT_SIZE, GamePanel.UNIT_SIZE);
     }
 }
