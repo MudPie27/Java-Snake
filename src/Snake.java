@@ -1,22 +1,26 @@
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+
 
 public class Snake {
 
-    private int length;
-    private int[] x;
-    private int[] y;
-    public int direction; // 0 - up, 1 - down, 2 - left, 3 - right
+    public ArrayList<Point> bodySegments;
+    private int direction;
+    private int speed;
 
-    public Snake(int length) {
-        this.length = length;
-        x = new int[length];
-        y = new int[length];
-        direction = 3; // Start with right direction
+    public Snake(int initialLength) {
+        bodySegments = new ArrayList<>();
+        direction = 3; // Right by default
+        speed = 5;
 
-        // Initialize snake's body positions
-        for (int i = 0; i < length; i++) {
-            x[i] = (length - i - 1) * 20;
-            y[i] = 0;
+        // Initialize the snake's body segments
+        int startX = 400;
+        int startY = 0;
+        for (int i = 0; i < initialLength; i++) {
+            int segmentX = startX - i * 20;
+            int segmentY = startY;
+            bodySegments.add(new Point(segmentX, segmentY));
         }
     }
 
@@ -24,33 +28,61 @@ public class Snake {
         this.direction = direction;
     }
 
+    public void controls(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_UP && direction != 1)
+            setDirection(0); // Up
+        else if (e.getKeyCode() == KeyEvent.VK_DOWN && direction != 0)
+            setDirection(1); // Down
+        else if (e.getKeyCode() == KeyEvent.VK_LEFT && direction != 3)
+            setDirection(2); // Left
+        else if (e.getKeyCode() == KeyEvent.VK_RIGHT && direction != 2)
+            setDirection(3); // Right
+    }
+
     public void move() {
-        // Move the snake by updating its body positions
-        for (int i = length - 1; i > 0; i--) {
-            x[i] = x[i - 1];
-            y[i] = y[i - 1];
-        }
+        // Move the snake's head in the current direction
+        Point head = bodySegments.get(0);
+        int headX = head.x;
+        int headY = head.y;
 
         switch (direction) {
             case 0: // Up
-                y[0] -= 20;
+                headY -= speed;
                 break;
             case 1: // Down
-                y[0] += 20;
+                headY += speed;
                 break;
             case 2: // Left
-                x[0] -= 20;
+                headX -= speed;
                 break;
             case 3: // Right
-                x[0] += 20;
+                headX += speed;
                 break;
         }
+
+        // Create a new head segment with the updated position
+        Point newHead = new Point(headX, headY);
+
+        // Insert the new head segment at the beginning of the bodySegments list
+        bodySegments.add(0, newHead);
+
+        // Remove the tail segment to maintain the snake's length
+        bodySegments.remove(bodySegments.size() - 1);
+    }
+
+    public void grow() {
+        // To make the snake grow, add a new segment at the current tail position
+        Point tail = bodySegments.get(bodySegments.size() - 1);
+        bodySegments.add(new Point(tail.x, tail.y));
     }
 
     public void draw(Graphics g) {
-        g.setColor(Color.white);
-        for (int i = 0; i < length; i++) {
-            g.fillRect(x[i], y[i], 20, 20);
+        g.setColor(new Color(115, 150, 240));
+
+        for (Point segment : bodySegments) {
+            int segmentX = segment.x;
+            int segmentY = segment.y;
+            g.fillRect(segmentX, segmentY, 30, 30);
         }
     }
 }

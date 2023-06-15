@@ -1,3 +1,5 @@
+// GamePanel is where the game runs. It updates the game window
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -12,11 +14,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     public Image image;
     public Graphics graphics;
     private Snake snake;
+    private Food food;
 
     // constructor
     public GamePanel() {
 
-        snake = new Snake(15);
+        snake = new Snake(30);
+        food = new Food();
 
         this.setFocusable(true);
         this.addKeyListener(this);
@@ -37,7 +41,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
     private void draw(Graphics g) {
         // draw all the created objects from the constructor 
+    	ImageIcon grass = new ImageIcon("E:\\Intern northpnd\\Java-Snake\\src\\assets\\BG.png");
+    	Image grassImage = grass.getImage();
+        g.drawImage(grassImage, 0 ,0, null);
         snake.draw(g);
+        food.draw(g);
        
     }
 
@@ -48,13 +56,47 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     
     // collision 
     public void checkCollision() {
+        // Check collision with boundaries
+        if (snake.bodySegments.get(0).x < 0) {
+            snake.bodySegments.get(0).x = 0;
+        } else if (snake.bodySegments.get(0).x >= GAME_WIDTH) {
+            snake.bodySegments.get(0).x = GAME_WIDTH - 20;
+        }
+    
+        if (snake.bodySegments.get(0).y < 0) {
+            snake.bodySegments.get(0).y = 0;
+        } else if (snake.bodySegments.get(0).y >= GAME_HEIGHT) {
+            snake.bodySegments.get(0).y = GAME_HEIGHT - 20;
+        }
+    
+        // Check collision with body segments (excluding the head)
+        for (int i = 1; i < snake.bodySegments.size(); i++) {
+            if (snake.bodySegments.get(0).equals(snake.bodySegments.get(i))) {
+                // Collision with body segment, handle game over or any other desired action
+                // For example, you can call a method like gameOver() to handle the game over condition
+                gameOver();
+                break;
+            }
+        }
 
+        if (food.checkCollision(snake.bodySegments.get(0).x, snake.bodySegments.get(0).y)) {
+            snake.grow(); // Make the snake grow when it collides with the food
+            food.spawnFood(); // Spawn new food
+        }
     }
+    
+    private void gameOver() {
+        // Implement your game over logic here
+        // For example, stop the game loop, show a message, etc.
+    }
+    
+    
+
 
     // run the game loop
     public void run() {
         long lastTime = System.nanoTime();
-        double amountOfTicks = 30;
+        double amountOfTicks = 60;
         double ns = 1000000000 / amountOfTicks;
         double delta = 0;
         long now;
@@ -76,18 +118,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
     // Key press listeners 
     @Override
     public void keyPressed(KeyEvent e) {
-
-        int keyCode = e.getKeyCode();
-        if (keyCode == KeyEvent.VK_UP && snake.direction != 1) {
-            snake.setDirection(0); // Up
-        } else if (keyCode == KeyEvent.VK_DOWN && snake.direction != 0) {
-            snake.setDirection(1); // Down
-        } else if (keyCode == KeyEvent.VK_LEFT && snake.direction != 3) {
-            snake.setDirection(2); // Left
-        } else if (keyCode == KeyEvent.VK_RIGHT && snake.direction != 2) {
-            snake.setDirection(3); // Right
-        }
-
+    	snake.controls(e);
     }
 
     @Override
