@@ -17,6 +17,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private Food food;
 	private Bomb bomb;
 	private Score score;
+	public static boolean gameOver = false;
 
 	// constructor
 	public GamePanel() {
@@ -88,12 +89,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	}
 
 	private void gameOver() {
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		System.exit(0);
+		
+		gameOver = true;
+
 	}
 
 	// run the game loop
@@ -104,7 +102,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		double delta = 0;
 		long now;
 
-		while (true) {
+		while (!gameOver) {
 			now = System.nanoTime();
 			delta = delta + (now - lastTime) / ns;
 			lastTime = now;

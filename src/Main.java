@@ -10,6 +10,8 @@
 class Main { 
     // main method that runs the program
     public static void main(String[] args) {
+      Music sfx = new Music();
+      sfx.playBGM();
       new GameFrame();
     }
   }

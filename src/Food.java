@@ -24,8 +24,7 @@ public class Food {
 
     public boolean appleChoice() {
         chance = (int) (Math.random() * 7);
-        System.out.println(chance);
-
+        
         if (chance == 1)
             gApple = true;
         else
