@@ -1,3 +1,5 @@
+// class that handles music 
+
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -5,7 +7,7 @@ import javax.sound.sampled.Clip;
 
 // For playing sound in game
 public class Music {
-
+    // variable
     private Clip backgroundMusic;
 
     // constructor 

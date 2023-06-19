@@ -16,10 +16,13 @@ public class Score {
 
     // constructor
     public Score() {
+        // font details 
         pointFont = new Font("Lato", Font.PLAIN, 30);
         GOFont = new Font("Arial", Font.BOLD, 80);
-        points = 0;
 
+        points = 0; // starts at 0 points
+
+        // reads the HighScore file to get the high score
         try {
             fileLines = Files.readAllLines(Paths.get(GamePanel.hsFile));
             highScore = Integer.parseInt(fileLines.get(0));
@@ -28,22 +31,17 @@ public class Score {
         }
     }
 
-    // method that returns the scores
-    public int getPoints() {
-        return points;
-    }
-
-    // methods that counts the scores and checks if the game is over
+    // methods that counts the scores
     public void updatePoints(boolean ga) {
         if (ga)
-            points += 2;
+            points += 2; // 2 points if golden apple
         else
-            points++;
+            points++; // 1 point if regular apple
     }
 
     // save the final score to a file
     public void saveHighScore() {
-        if (points > highScore) {
+        if (points > highScore) { // if the latest player score is higher than the overall high score
             try {
                 writer = new FileWriter(GamePanel.hsFile);
                 writer.write(Integer.toString(points));
@@ -54,15 +52,15 @@ public class Score {
         }
     }
 
-    // display the scores
+    // draw method
     public void draw(Graphics g) {
-
+        // displays control, points and high score information
         g.setColor(Color.white);
         g.setFont(pointFont);
         g.drawString("Controls: \u2191 \u2192 \u2193 \u2190", 5, 30);
         g.drawString("High Score: " + highScore, 600, 30);
         g.drawString("" + points, 762, 60);
-
+        // displays game over text is the game ends
         if (GamePanel.gameOver) {
             g.setFont(GOFont);
             g.drawString("Game Over", ((GamePanel.WIDTH / 2) - 210), (GamePanel.HEIGHT / 2));

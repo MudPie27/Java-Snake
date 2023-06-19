@@ -1,6 +1,6 @@
 /*
  ICS4U1-3 Summative 
- Snake Game Alpha
+ Snake Game
  Aseer & Kabir
  05/06/2023
 */
@@ -10,6 +10,7 @@
 class Main { 
     // main method that runs the program
     public static void main(String[] args) {
+      // calls background music
       Music sfx = new Music();
       sfx.playBGM();
       new GameFrame();

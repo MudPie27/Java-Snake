@@ -18,8 +18,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	public static String bgmWav = "src\\images\\BGM.wav";
 	public static String hsFile = "src\\HighScore.txt";
 
-
-
 	// objects
 	public Thread gameThread;
 	public Image image;
@@ -43,6 +41,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		
+		// spawns the initial objects and player snake
 		food.generateFood();
 		bomb.generateBomb();
 		snake.startPosition();
@@ -61,16 +60,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 	private void draw(Graphics g) {
 		// draw all the created objects from the constructor
-		ImageIcon grass = new ImageIcon("src\\images\\BG.png");
+		ImageIcon grass = new ImageIcon(grassIMG); 
 		Image grassImage = grass.getImage();
-		g.drawImage(grassImage, 0, 0, null);
+		g.drawImage(grassImage, 0, 0, null); // backgroubnd
 		food.draw(g);
 		bomb.draw(g);
 		snake.draw(g);
 		score.draw(g);
 	}
 
-	// call associated move methods for each objects movement
+	// call snake move methods 
 	public void move() {
 		snake.move();
 	}
@@ -78,27 +77,30 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	// collision
 	public void checkCollision() {
 
+		// checks if snake's head collided with food
 		if (snake.getLocation().equals(food.getPosition())) {
-			snake.increaseLength();
-			score.updatePoints(food.gApple);
-			food.generateFood();
-			bomb.generateBomb();
+			snake.increaseLength(); // makes snake longer
+			score.updatePoints(food.gApple); // updates point
+			food.generateFood(); // generates new food
+			bomb.generateBomb(); // generates bomb
 		} 
-
+		// all collisions below ends the game
+		// checks if snake's head collided with bomb
 		if (snake.getLocation().equals(bomb.getPosition())) {
 			gameOver();
 		} 
 
-		
+		// checks if snake's head collided with other parts of it's body
 		if (snake.selfCollision() == true) {
 			gameOver();
 		}
-		
+		// checks if snake's head goes outside the screen
 		if (snake.wallCollision()) {
 			gameOver();
 		}
 	}
 
+	// method that stops the game loop if called
 	private void gameOver() {
 		
 		gameOver = true;
