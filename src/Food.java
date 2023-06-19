@@ -14,17 +14,17 @@ public class Food {
     public Food() {
         size = 20;
         gApple = false;
-        
-        appleIcon = new ImageIcon("src\\images\\Apple.png");
+
+        appleIcon = new ImageIcon(GamePanel.appleImg);
         appleImage = appleIcon.getImage();
 
-        gAppleIcon = new ImageIcon("src\\images\\GoldenApple.png");
+        gAppleIcon = new ImageIcon(GamePanel.goldenAppleImg);
         gAppleImage = gAppleIcon.getImage();
     }
 
     public boolean appleChoice() {
         chance = (int) (Math.random() * 7);
-        
+
         if (chance == 1)
             gApple = true;
         else
@@ -35,8 +35,8 @@ public class Food {
 
     public void generateFood() {
         appleChoice();
-        x = ThreadLocalRandom.current().nextInt(0, GamePanel.WIDTH / Snake.SIZE) * Snake.SIZE;
-        y = ThreadLocalRandom.current().nextInt(0, GamePanel.HEIGHT / Snake.SIZE) * Snake.SIZE;
+        x = ThreadLocalRandom.current().nextInt(0, GamePanel.WIDTH / size) * size;
+        y = ThreadLocalRandom.current().nextInt(60 / size, GamePanel.HEIGHT / size) * size;   
     }
 
     public Point getPosition() {
@@ -49,9 +49,9 @@ public class Food {
 
         if (gApple) {
             g.drawImage(gAppleImage, x, y, size, size, null);
-           
+
         } else {
-            g.drawImage(appleImage, x, y, Snake.SIZE, Snake.SIZE, null);
+            g.drawImage(appleImage, x, y, size, size, null);
         }
 
     }

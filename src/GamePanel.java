@@ -9,6 +9,17 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 
+	// file directories
+	public static String snakeImg = "src\\images\\Snake.png";
+	public static String appleImg = "src\\images\\Apple.png";
+	public static String goldenAppleImg = "src\\images\\GoldenApple.png";
+	public static String bombImg = "src\\images\\Bomb.png";
+	public static String grassIMG = "src\\images\\BG.png";
+	public static String bgmWav = "src\\images\\BGM.wav";
+	public static String hsFile = "src\\HighScore.txt";
+
+
+
 	// objects
 	public Thread gameThread;
 	public Image image;

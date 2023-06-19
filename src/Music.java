@@ -18,7 +18,7 @@ public class Music {
 
         try {
 
-            AudioInputStream bgmSound = AudioSystem.getAudioInputStream(new File("src\\images\\BGM.wav"));
+            AudioInputStream bgmSound = AudioSystem.getAudioInputStream(new File(GamePanel.bgmWav));
             backgroundMusic = AudioSystem.getClip();
             backgroundMusic.open(bgmSound);
 

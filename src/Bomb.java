@@ -14,14 +14,13 @@ public class Bomb {
     public Bomb() {
         size = 20;
 
-        bombIcon = new ImageIcon("src\\images\\Bomb.png");
+        bombIcon = new ImageIcon(GamePanel.bombImg);
         bombImage = bombIcon.getImage();
 
     }
 
     public boolean bombChoice() {
         chance = (int) (Math.random() * 2);
-        System.out.println(chance);
 
         if (chance == 1)
             bombSpawns = true;
@@ -33,10 +32,10 @@ public class Bomb {
 
     public void generateBomb() {
         bombChoice();
-        if (chance == 1) {
-            x = ThreadLocalRandom.current().nextInt(0, GamePanel.WIDTH / Snake.SIZE) * Snake.SIZE;
-            y = ThreadLocalRandom.current().nextInt(0, GamePanel.HEIGHT / Snake.SIZE) * Snake.SIZE;
-        } else if ((Score.points <= 5) || (chance != 1)) {
+        if ((Score.points > 5) && (chance == 1)) {
+            x = ThreadLocalRandom.current().nextInt(0, GamePanel.WIDTH / size) * size;
+            y = ThreadLocalRandom.current().nextInt(60 / size, GamePanel.HEIGHT / size) * size;
+        } else {
             x = -25;
             y = -25;
         }

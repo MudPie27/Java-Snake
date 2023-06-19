@@ -3,11 +3,16 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
+
 public class Snake {
 
 	public static final int SIZE = 20;
 	public static final int GRID = (GamePanel.WIDTH * GamePanel.HEIGHT) / (SIZE * SIZE);
 	private int length, direction;
+
+	ImageIcon snakeIcon;
+    Image snakeImage;
 
 	private int[] x;
 	private int[] y;
@@ -20,6 +25,9 @@ public class Snake {
 		y = new int[GRID];
 
 		direction = 'R';
+
+		snakeIcon = new ImageIcon(GamePanel.snakeImg);
+        snakeImage = snakeIcon.getImage();
 	}
 
 	public void startPosition() {
@@ -106,7 +114,7 @@ public class Snake {
 	public void draw(Graphics g) {
 		g.setColor(new Color(104, 171, 237));
 		for (int i = 0; i < length; i++) {
-			g.fillRect(x[i], y[i], SIZE, SIZE);
+			g.drawImage(snakeImage, x[i], y[i], SIZE, SIZE, null);
 		}
 	}
 }
