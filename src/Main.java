@@ -1,10 +1,3 @@
-/*
- ICS4U1-3 Summative 
- Snake Game
- Aseer & Kabir
- 05/06/2023
-*/
-
 // client class
 
 class Main { 
